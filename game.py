@@ -247,7 +247,7 @@ def execute_go(direction):
     current_room = move(current_room["exits"], direction)
 
 
-def inv_mass(items):
+def inv_mass(item):
     inv_mass=0
     for i in inventory:
         inv_mass +=i["mass"]
@@ -262,15 +262,18 @@ def execute_take(item_id):
     there is no such item in the room, this function prints
     "You cannot take that."
     """
-    items_e = False
+    item_exists = False
     for item in current_room["items"]:
-        items_e = True
-        if max_mass > inv_mass(item) + item["mass"]:
-            current_room["items"].remove(item)
-            inventory.append(item)
-            print(item["name"]+ "added to inventory")
-        else:
-            print("You carry too much weight")
+        if item_id == item["id"]:
+            item_exists = True
+            if max_mass > inv_mass(item) + item["mass"]:
+                current_room["items"].remove(item)
+                inventory.append(item)
+                print(item["name"] + " added to inventory.")
+            else:
+                print("You carry too much weight.")
+    if not item_exists:
+        print("You cannot take that.")
     
 
 def execute_drop(item_id):
@@ -284,7 +287,7 @@ def execute_drop(item_id):
             item_e = True
             inventory.remove(item)
             current_room["items"].append(item)
-            print(item["name"]+ "removed from inventory")
+            print(item["name"]+ " removed from inventory")
     if not item_e:
         print("cant be droped")
     
